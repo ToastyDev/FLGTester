@@ -23,11 +23,8 @@ public:
 	// Sets default values for this character's properties
 	AChaser();
 
-	UPROPERTY(EditAnywhere)
-	class UPawnSensingComponent* pawnSensingComponent;
-
 	UPROPERTY()
-	Mode currentMode = Mode::WANDER;
+	Mode currentMode;
 
 	UPROPERTY(EditAnywhere, Category = "AI Variables")
 	float sightRange;
@@ -45,13 +42,7 @@ public:
 	float wanderSpeed;
 
 	UPROPERTY(VisibleAnywhere)
-	bool bIsAtDestination;
-
-	UPROPERTY(VisibleAnywhere)
 	class AChaseAIController* chaseAIController;
-
-	UPROPERTY()
-	FVector savedLocation;
 
 protected:
 	// Called when the game starts or when spawned
@@ -65,12 +56,6 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION()
-	void OnSeePlayer(APawn* pawn);
-
-	UFUNCTION()
-	void WalkToPoint(FVector location);
-
-	UFUNCTION()
 	void SetChaseState();
 
 	UFUNCTION()
@@ -78,4 +63,5 @@ public:
 
 	UFUNCTION()
 	void SetWanderState();
+
 };

@@ -30,6 +30,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AChaser> chaserClass;
 
+	UPROPERTY(VisibleAnywhere)
+	int32 timesPressed;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

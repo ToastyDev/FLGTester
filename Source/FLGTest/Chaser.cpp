@@ -12,9 +12,6 @@ AChaser::AChaser()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	pawnSensingComponent = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("Pawn Sensing Component"));
-	pawnSensingComponent->bHearNoises = false;
-
 	GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -90.f));
 	GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
 
@@ -23,21 +20,14 @@ AChaser::AChaser()
 	bUseControllerRotationRoll = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
+	currentMode = Mode::WANDER;
+
 }
 
 // Called when the game starts or when spawned
 void AChaser::BeginPlay()
 {
 	Super::BeginPlay();
-
-	pawnSensingComponent->SetPeripheralVisionAngle(peripheralVisionAngle);
-	pawnSensingComponent->SightRadius = sightRange;
-	
-	pawnSensingComponent->OnSeePawn.AddDynamic(this, &AChaser::OnSeePlayer);
-
-	SetWanderState();
-
-	bIsAtDestination = false;
 }
 
 // Called every frame
@@ -54,40 +44,16 @@ void AChaser::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void AChaser::OnSeePlayer(APawn* pawn)
-{
-	SetChaseState();
-}
-
-void AChaser::WalkToPoint(FVector location)
-{
-	//go to given point
-	chaseAIController->MoveToLocation(location);
-	/*if (GetActorLocation() == location)
-	{
-		bIsAtDestination = true;
-		FVector newLocation = FVector(FMath::VRand());
-		bIsAtDestination = false;
-		WalkToPoint(newLocation);
-	}*/
-}
-
 void AChaser::SetChaseState()
 {
-	//set last location for save
-	if (currentMode == Mode::WANDER)
-	{
-		savedLocation = GetActorLocation();
-	}
 	currentMode = Mode::CHASE;
 	GetCharacterMovement()->MaxWalkSpeed = chaseSpeed;
-	bIsAtDestination = false;
 }
 
 void AChaser::SetRetreatState()
 {
 	currentMode = Mode::RETREAT;
-	//grab last chase location
+	chaseAIController->SetNextLocation();
 }
 
 void AChaser::SetWanderState()

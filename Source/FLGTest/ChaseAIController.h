@@ -24,10 +24,22 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 	UPROPERTY(EditAnywhere)
+	class UPawnSensingComponent* pawnSensingComponent;
+
+	UPROPERTY(EditAnywhere)
 	class AChaser* chaser;
+
+	UPROPERTY(VisibleAnywhere)
+	FVector savedLocation;
+
+	UFUNCTION()
+	void OnSeePlayer(APawn* detectedPawn);
 
 	UFUNCTION()
 	void SetNextLocation();
+
+	UFUNCTION()
+	void ReturnToLastLocation();
 
 	void OnMoveCompleted(FAIRequestID requestID, const FPathFollowingResult& result) override;
 

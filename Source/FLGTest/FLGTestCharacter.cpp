@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "SpawnButton.h"
 #include "ChaseHUD.h"
 
@@ -57,8 +58,7 @@ AFLGTestCharacter::AFLGTestCharacter()
 	triggerCapsule->OnComponentEndOverlap.AddDynamic(this, &AFLGTestCharacter::OnOverlapEnd);
 
 	currentSpawnButton = nullptr;
-	chaseHud->GetClass();
-	//ConstructorHelpers::FObjectFinder<AHUD> HUDObj(TEXT(""));
+	//chaseHud = Cast<AChaseHUD>(UGameplayStatics::GetPlayerController(this, 0)->GetHUD());
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -111,7 +111,7 @@ void AFLGTestCharacter::OnOverlapBegin(UPrimitiveComponent* overlappedComponent,
 	{
 		currentSpawnButton = Cast<ASpawnButton>(otherActor);
 		currentSpawnButton->bIsOverlapped = true;
-		if (chaseHud != nullptr)
+		if ((chaseHud != nullptr) && (currentSpawnButton->bCanBePressed))
 		{
 			chaseHud->ShowHUD();
 		}

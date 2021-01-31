@@ -46,11 +46,12 @@ void ASpawnButton::SpawnChaser()
 	if (bCanBePressed && bIsOverlapped && (chaserClass != nullptr))
 	{
 		UWorld* const world = GetWorld();
-		FVector const spawnLocation = FVector(-400.f, 0.f, 190.f);
-		FRotator const spawnRotation = FRotator(0.f, 0.f, 0.f);
+		FVector const spawnLocation = FVector(-1030.f, -1240.f, 220.f);
+		FRotator const spawnRotation = FRotator(0.f, 90.f, 0.f);
 		FActorSpawnParameters spawnParams;
 		world->SpawnActor<AChaser>(chaserClass, spawnLocation, spawnRotation, spawnParams);
 		bCanBePressed = false;
+		timesPressed += 1;
 	}
 }
 

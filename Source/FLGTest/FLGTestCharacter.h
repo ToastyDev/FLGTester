@@ -29,7 +29,23 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
+	UPROPERTY(VisibleAnywhere)
+	class UCapsuleComponent* triggerCapsule;
+
+	UFUNCTION()
+	void OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult);
+
+	UFUNCTION()
+	void OnOverlapEnd(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex);
+
+	class ASpawnButton* currentSpawnButton;
+
+	UPROPERTY(EditAnywhere)
+	class AChaseHUD* chaseHud;
+
 protected:
+
+	void OnInteract();
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();

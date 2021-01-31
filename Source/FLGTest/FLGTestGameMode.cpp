@@ -3,6 +3,7 @@
 #include "FLGTestGameMode.h"
 #include "FLGTestCharacter.h"
 #include "UObject/ConstructorHelpers.h"
+#include "ChaseHUD.h"
 
 AFLGTestGameMode::AFLGTestGameMode()
 {
@@ -12,4 +13,6 @@ AFLGTestGameMode::AFLGTestGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+
+	HUDClass = AChaseHUD::StaticClass();
 }

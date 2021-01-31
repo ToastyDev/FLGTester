@@ -8,6 +8,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "SpawnButton.h"
+#include "ChaseHUD.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AFLGTestCharacter
@@ -45,6 +47,18 @@ AFLGTestCharacter::AFLGTestCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+
+	triggerCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Trigger Capsule"));
+	triggerCapsule->InitCapsuleSize(55.f, 96.f);
+	triggerCapsule->SetCollisionProfileName(TEXT("Trigger"));
+	triggerCapsule->SetupAttachment(RootComponent);
+
+	triggerCapsule->OnComponentBeginOverlap.AddDynamic(this, &AFLGTestCharacter::OnOverlapBegin);
+	triggerCapsule->OnComponentEndOverlap.AddDynamic(this, &AFLGTestCharacter::OnOverlapEnd);
+
+	currentSpawnButton = nullptr;
+	chaseHud->GetClass();
+	//ConstructorHelpers::FObjectFinder<AHUD> HUDObj(TEXT(""));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -74,8 +88,51 @@ void AFLGTestCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AFLGTestCharacter::OnResetVR);
+
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AFLGTestCharacter::OnInteract);
 }
 
+
+void AFLGTestCharacter::OnInteract()
+{ 
+	if (currentSpawnButton)
+	{
+		currentSpawnButton->SpawnChaser();
+		if (chaseHud != nullptr)
+		{
+			chaseHud->HideHUD();
+		}
+	}
+}
+
+void AFLGTestCharacter::OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult)
+{
+	if (otherActor && (otherActor != this) && otherComponent && otherActor->GetClass()->IsChildOf(ASpawnButton::StaticClass()))
+	{
+		currentSpawnButton = Cast<ASpawnButton>(otherActor);
+		currentSpawnButton->bIsOverlapped = true;
+		if (chaseHud != nullptr)
+		{
+			chaseHud->ShowHUD();
+		}
+	}
+}
+
+void AFLGTestCharacter::OnOverlapEnd(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex)
+{
+	if (otherActor && (otherActor != this) && otherComponent)
+	{	
+		if (currentSpawnButton != nullptr)
+		{
+			currentSpawnButton->bIsOverlapped = false;
+			currentSpawnButton = nullptr;
+			if (chaseHud != nullptr)
+			{
+				chaseHud->HideHUD();
+			}
+		}
+	}
+}
 
 void AFLGTestCharacter::OnResetVR()
 {

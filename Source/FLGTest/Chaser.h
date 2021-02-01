@@ -26,23 +26,20 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "AI Variables")
 	Mode currentMode;
 
-	UPROPERTY(EditAnywhere, Category = "AI Variables")
+	UPROPERTY(BlueprintReadWrite, Category = "AI Variables")
 	float sightRange;
 
-	UPROPERTY(EditAnywhere, Category = "AI Variables")
+	UPROPERTY(BlueprintReadWrite, Category = "AI Variables")
 	float peripheralVisionAngle;
 
-	UPROPERTY(EditAnywhere, Category = "AI Variables")
+	UPROPERTY(BlueprintReadWrite, Category = "AI Variables")
 	float nextMoveDelay;
 
-	UPROPERTY(EditAnywhere, Category = "AI Variables")
+	UPROPERTY(BlueprintReadWrite, Category = "AI Variables")
 	float chaseSpeed;
 
-	UPROPERTY(EditAnywhere, Category = "AI Variables")
+	UPROPERTY(BlueprintReadWrite, Category = "AI Variables")
 	float wanderSpeed;
-
-	UPROPERTY(VisibleAnywhere)
-	class AChaseAIController* chaseAIController;
 
 protected:
 	// Called when the game starts or when spawned

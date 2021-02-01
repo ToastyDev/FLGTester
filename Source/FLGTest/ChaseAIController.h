@@ -23,10 +23,10 @@ public:
 
 	virtual void Tick(float DeltaSeconds) override;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
 	class UPawnSensingComponent* pawnSensingComponent;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
 	class AChaser* chaser;
 
 	UPROPERTY(VisibleAnywhere)

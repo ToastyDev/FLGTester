@@ -18,16 +18,16 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	bool bCanBePressed;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(BlueprintReadWrite)
 	UStaticMeshComponent* mesh;
 
 	UPROPERTY(VisibleAnywhere)
 	class USphereComponent* sphereCollider;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(BlueprintReadWrite)
 	float sphereRadius;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(BlueprintReadWrite)
 	TSubclassOf<class AChaser> chaserClass;
 
 	UPROPERTY(VisibleAnywhere)

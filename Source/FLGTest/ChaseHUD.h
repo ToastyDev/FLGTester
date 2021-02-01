@@ -26,6 +26,9 @@ public:
 	UFUNCTION()
 	void HideGameOver();
 
+	UPROPERTY(VisibleAnywhere)
+	int32 score;
+
 protected:
 
 	TSharedPtr<class SSpawnPromptWidget> spawnWidget;

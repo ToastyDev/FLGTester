@@ -96,6 +96,14 @@ void AFLGTestCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	chaseHud = Cast<AChaseHUD>(UGameplayStatics::GetPlayerController(this, 0)->GetHUD());
+	score = 0;
+	elapsedTime = 0;
+}
+
+void AFLGTestCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	elapsedTime = UGameplayStatics::GetRealTimeSeconds(GetWorld());
 }
 
 void AFLGTestCharacter::OnInteract()
@@ -103,6 +111,7 @@ void AFLGTestCharacter::OnInteract()
 	if (currentSpawnButton)
 	{
 		currentSpawnButton->SpawnChaser();
+		score = elapsedTime;
 		if (chaseHud != nullptr)
 		{
 			chaseHud->HideHUD();
@@ -127,6 +136,7 @@ void AFLGTestCharacter::OnOverlapBegin(UPrimitiveComponent* overlappedComponent,
 	{
 		currentChaser = Cast<AChaser>(otherActor);
 		currentChaser->Destroy();
+		score = elapsedTime - score;
 		currentSpawnButton->bCanBePressed = true;
 		chaseHud->ShowGameOver();
 		UE_LOG(LogTemp, Warning, TEXT("PLAYER CAUGHT!"));
@@ -140,7 +150,6 @@ void AFLGTestCharacter::OnOverlapEnd(UPrimitiveComponent* overlappedComponent, A
 		if (currentSpawnButton != nullptr)
 		{
 			currentSpawnButton->bIsOverlapped = false;
-			//currentSpawnButton = nullptr;
 			if (chaseHud != nullptr)
 			{
 				chaseHud->HideHUD();

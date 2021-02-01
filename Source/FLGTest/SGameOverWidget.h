@@ -19,6 +19,8 @@ public:
 
 	TWeakObjectPtr<class AChaseHUD> OwningHUD;
 
+	int32 inScore;
+
 	FReply OnPlayAgainClicked() const;
 
 	FReply OnQuitClicked() const;

@@ -4,10 +4,11 @@
 #include "ChaseHUD.h"
 #include "SSpawnPromptWidget.h"
 #include "SGameOverWidget.h"
-#include "SpawnButton.h"
 #include "Widgets/SWeakWidget.h"
 #include "Engine/Engine.h"
 #include "UObject/ConstructorHelpers.h"
+#include "FLGTEstCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 AChaseHUD::AChaseHUD()
 {
@@ -38,6 +39,12 @@ void AChaseHUD::HideHUD()
 
 void AChaseHUD::ShowGameOver()
 {
+	AFLGTestCharacter* playerCharacter = Cast<AFLGTestCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (playerCharacter != nullptr)
+	{
+		score = playerCharacter->score;
+	}
+
 	if (GEngine && GEngine->GameViewport)
 	{
 		gameOverWidget = SNew(SGameOverWidget).OwningHUD(this);
@@ -47,6 +54,7 @@ void AChaseHUD::ShowGameOver()
 		{
 			PlayerOwner->bShowMouseCursor = true;
 			PlayerOwner->SetInputMode(FInputModeUIOnly());
+			PlayerOwner->SetIgnoreMoveInput(true);
 		}
 	}
 }
@@ -61,6 +69,7 @@ void AChaseHUD::HideGameOver()
 		{
 			PlayerOwner->bShowMouseCursor = false;
 			PlayerOwner->SetInputMode(FInputModeGameOnly());
+			PlayerOwner->SetIgnoreMoveInput(false);
 		}
 	}
 }

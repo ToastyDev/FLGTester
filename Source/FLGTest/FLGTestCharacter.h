@@ -40,14 +40,22 @@ public:
 
 	void BeginPlay();
 
+	void Tick(float DeltaTime);
+
 	UPROPERTY(VisibleAnywhere)
 	class AChaser* currentChaser;
 
 	UPROPERTY(VisibleAnywhere)
 	class ASpawnButton* currentSpawnButton;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
 	class AChaseHUD* chaseHud;
+
+	UPROPERTY(VisibleAnywhere)
+	int32 elapsedTime;
+
+	UPROPERTY(VisibleAnywhere)
+	int32 score;
 
 protected:
 

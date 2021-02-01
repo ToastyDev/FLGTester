@@ -3,6 +3,7 @@
 
 #include "SGameOverWidget.h"
 #include "ChaseHUD.h"
+#include "FLGTestCharacter.h"
 #include "GameFramework/PlayerController.h"
 
 void SGameOverWidget::Construct(const FArguments & InArgs)
@@ -11,6 +12,7 @@ void SGameOverWidget::Construct(const FArguments & InArgs)
 
 	const FText text = FText::FromString("Press E to spawn a chaser");
 	const FText gameOverText = FText::FromString("Game Over");
+	FText scoreText = FText::Format(FText::FromString("You lasted {0} seconds!"), OwningHUD->score);
 	const FText playAgainText = FText::FromString("Play Again");
 	const FText quitText = FText::FromString("Quit");
 
@@ -31,7 +33,7 @@ void SGameOverWidget::Construct(const FArguments & InArgs)
 		.VAlign(VAlign_Fill)
 		[
 			SNew(SImage)
-			.ColorAndOpacity(FColor::Silver)
+			.ColorAndOpacity(FColor::Transparent)
 		]
 		+SOverlay::Slot()
 		.HAlign(HAlign_Center)
@@ -45,6 +47,14 @@ void SGameOverWidget::Construct(const FArguments & InArgs)
 				SNew(STextBlock)
 				.Font(textStyle)
 				.Text(gameOverText)
+				.Justification(ETextJustify::Center)
+			]
+			//score text
+			+SVerticalBox::Slot()
+			[
+				SNew(STextBlock)
+				.Font(textStyle)
+				.Text(scoreText)
 				.Justification(ETextJustify::Center)
 			]
 			//play again button

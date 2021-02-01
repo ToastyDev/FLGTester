@@ -40,8 +40,10 @@ public:
 
 	void BeginPlay();
 
+	UPROPERTY(VisibleAnywhere)
 	class AChaser* currentChaser;
 
+	UPROPERTY(VisibleAnywhere)
 	class ASpawnButton* currentSpawnButton;
 
 	UPROPERTY(EditAnywhere)

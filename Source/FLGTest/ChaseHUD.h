@@ -17,11 +17,13 @@ class FLGTEST_API AChaseHUD : public AHUD
 public:
 	AChaseHUD();
 
-
 	void ShowHUD();
 	void HideHUD();
 
+	UFUNCTION()
 	void ShowGameOver();
+
+	UFUNCTION()
 	void HideGameOver();
 
 protected:

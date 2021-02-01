@@ -29,7 +29,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	class AChaser* chaser;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	FVector nextLoc;
 
 	UPROPERTY(VisibleAnywhere)

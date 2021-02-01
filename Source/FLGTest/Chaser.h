@@ -23,7 +23,7 @@ public:
 	// Sets default values for this character's properties
 	AChaser();
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "AI Variables")
 	Mode currentMode;
 
 	UPROPERTY(EditAnywhere, Category = "AI Variables")

@@ -38,6 +38,7 @@ void ASpawnButton::BeginPlay()
 	
 	bCanBePressed = true;
 	bIsOverlapped = false;
+	sphereCollider->SetSphereRadius(sphereRadius);
 }
 
 // Called every frame

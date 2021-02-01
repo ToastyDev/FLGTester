@@ -29,6 +29,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	class AChaser* chaser;
 
+	UPROPERTY()
+	FVector nextLoc;
+
 	UPROPERTY(VisibleAnywhere)
 	FVector savedLocation;
 

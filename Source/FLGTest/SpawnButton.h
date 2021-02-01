@@ -33,6 +33,9 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	int32 timesPressed;
 
+	UPROPERTY(VisibleAnywhere)
+	class UTextRenderComponent* textRender;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -44,7 +47,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SpawnChaser();
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	bool bIsOverlapped;
 
 	UFUNCTION()

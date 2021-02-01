@@ -20,8 +20,7 @@ AChaser::AChaser()
 	bUseControllerRotationRoll = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
-	currentMode = Mode::WANDER;
-
+	currentMode = Mode::CHASE;
 }
 
 // Called when the game starts or when spawned
@@ -53,7 +52,6 @@ void AChaser::SetChaseState()
 void AChaser::SetRetreatState()
 {
 	currentMode = Mode::RETREAT;
-	chaseAIController->SetNextLocation();
 }
 
 void AChaser::SetWanderState()

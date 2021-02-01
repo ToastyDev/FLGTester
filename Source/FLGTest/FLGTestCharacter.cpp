@@ -10,6 +10,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "SpawnButton.h"
+#include "Chaser.h"
 #include "ChaseHUD.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -58,7 +59,6 @@ AFLGTestCharacter::AFLGTestCharacter()
 	triggerCapsule->OnComponentEndOverlap.AddDynamic(this, &AFLGTestCharacter::OnOverlapEnd);
 
 	currentSpawnButton = nullptr;
-	//chaseHud = Cast<AChaseHUD>(UGameplayStatics::GetPlayerController(this, 0)->GetHUD());
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -92,6 +92,11 @@ void AFLGTestCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AFLGTestCharacter::OnInteract);
 }
 
+void AFLGTestCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	chaseHud = Cast<AChaseHUD>(UGameplayStatics::GetPlayerController(this, 0)->GetHUD());
+}
 
 void AFLGTestCharacter::OnInteract()
 { 
@@ -107,6 +112,7 @@ void AFLGTestCharacter::OnInteract()
 
 void AFLGTestCharacter::OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult)
 {
+	//check if overlap is spawn button zone
 	if (otherActor && (otherActor != this) && otherComponent && otherActor->GetClass()->IsChildOf(ASpawnButton::StaticClass()))
 	{
 		currentSpawnButton = Cast<ASpawnButton>(otherActor);
@@ -115,6 +121,15 @@ void AFLGTestCharacter::OnOverlapBegin(UPrimitiveComponent* overlappedComponent,
 		{
 			chaseHud->ShowHUD();
 		}
+	}
+	//check if overlap is the chaser
+	if (otherActor && (otherActor != this) && otherComponent && otherActor->GetClass()->IsChildOf(AChaser::StaticClass()))
+	{
+		currentChaser = Cast<AChaser>(otherActor);
+		currentChaser->Destroy();
+		currentSpawnButton->bCanBePressed = true;
+		chaseHud->ShowGameOver();
+		UE_LOG(LogTemp, Warning, TEXT("PLAYER CAUGHT!"));
 	}
 }
 
@@ -125,7 +140,7 @@ void AFLGTestCharacter::OnOverlapEnd(UPrimitiveComponent* overlappedComponent, A
 		if (currentSpawnButton != nullptr)
 		{
 			currentSpawnButton->bIsOverlapped = false;
-			currentSpawnButton = nullptr;
+			//currentSpawnButton = nullptr;
 			if (chaseHud != nullptr)
 			{
 				chaseHud->HideHUD();

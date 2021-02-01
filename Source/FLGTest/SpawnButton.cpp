@@ -4,6 +4,7 @@
 #include "Chaser.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/TextRenderComponent.h"
 #include "DrawDebugHelpers.h"
 
 // Sets default values
@@ -21,6 +22,13 @@ ASpawnButton::ASpawnButton()
 	sphereCollider -> InitSphereRadius(sphereRadius);
 	sphereCollider -> SetCollisionProfileName("Trigger");
 	sphereCollider -> SetupAttachment(mesh);
+	
+	textRender = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Text Render"));
+	textRender->SetTextRenderColor(FColor::Red);
+	textRender->SetRelativeLocation(FVector(0.f, 55.f, 40.f));
+	textRender->SetRelativeRotation(FRotator(0.f, 90.f, 0.f));
+	textRender->Text = FText::AsNumber(timesPressed);
+	textRender->SetupAttachment(mesh);
 }
 
 // Called when the game starts or when spawned
@@ -37,7 +45,7 @@ void ASpawnButton::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	DrawDebugSphere(GetWorld(), GetActorLocation(), sphereRadius, 20, FColor::Purple, false, -1, 0, 1);
+	//DrawDebugSphere(GetWorld(), GetActorLocation(), sphereRadius, 20, FColor::Purple, false, -1, 0, 1);
 
 }
 
@@ -52,6 +60,7 @@ void ASpawnButton::SpawnChaser()
 		world->SpawnActor<AChaser>(chaserClass, spawnLocation, spawnRotation, spawnParams);
 		bCanBePressed = false;
 		timesPressed += 1;
+		textRender->SetText(FText::AsNumber(timesPressed));
 	}
 }
 

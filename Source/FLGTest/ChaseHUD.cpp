@@ -3,6 +3,7 @@
 
 #include "ChaseHUD.h"
 #include "SSpawnPromptWidget.h"
+#include "SGameOverWidget.h"
 #include "SpawnButton.h"
 #include "Widgets/SWeakWidget.h"
 #include "Engine/Engine.h"
@@ -10,8 +11,6 @@
 
 AChaseHUD::AChaseHUD()
 {
-	//ConstructorHelpers::FObjectFinder<ASpawnButton> spawnObj(TEXT("Blueprint'/Game/MySpawnButton.MySpawnButton'"));
-	//spawnButton = spawnObj.Object;
 }
 
 void AChaseHUD::BeginPlay()
@@ -37,18 +36,31 @@ void AChaseHUD::HideHUD()
 	}
 }
 
-void AChaseHUD::IsOverlapped()
+void AChaseHUD::ShowGameOver()
 {
-	if ((spawnButton != nullptr) && (spawnButton->GetIsOverlapped() == true))
+	if (GEngine && GEngine->GameViewport)
 	{
-		ShowHUD();
+		gameOverWidget = SNew(SGameOverWidget).OwningHUD(this);
+		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(gameOverWidgetContainer, SWeakWidget).PossiblyNullContent(gameOverWidget.ToSharedRef()));
+
+		if (PlayerOwner)
+		{
+			PlayerOwner->bShowMouseCursor = true;
+			PlayerOwner->SetInputMode(FInputModeUIOnly());
+		}
 	}
 }
 
-void AChaseHUD::IsNotOverlapped()
+void AChaseHUD::HideGameOver()
 {
-	if ((spawnButton != nullptr) && (spawnButton->GetIsOverlapped() == false))
+	if (GEngine && GEngine->GameViewport && gameOverWidgetContainer.IsValid())
 	{
-		HideHUD();
+		GEngine->GameViewport->RemoveViewportWidgetContent(gameOverWidgetContainer.ToSharedRef());
+
+		if (PlayerOwner)
+		{
+			PlayerOwner->bShowMouseCursor = false;
+			PlayerOwner->SetInputMode(FInputModeGameOnly());
+		}
 	}
 }

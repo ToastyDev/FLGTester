@@ -28,8 +28,6 @@ void AChaseAIController::OnPossess(APawn* pawn)
 	pawnSensingComponent->SightRadius = chaser->sightRange;
 
 	pawnSensingComponent->OnSeePawn.AddDynamic(this, &AChaseAIController::OnSeePlayer);
-
-	SetNextLocation();
 }
 
 void AChaseAIController::Tick(float DeltaSeconds)
@@ -45,21 +43,29 @@ void AChaseAIController::OnSeePlayer(APawn* detectedPawn)
 			return;
 		}
 
-		savedLocation = chaser->GetActorLocation();
+		savedLocation = nextLoc;
 		chaser->SetChaseState();
 		MoveToActor(playerCharacter);
 		UE_LOG(LogTemp, Warning, TEXT("PLAYER DETECTED!"));
-	
 }
 
 void AChaseAIController::SetNextLocation()
 {
-		FVector nextLoc;
+	if (savedLocation != FVector::ZeroVector)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Returning to %s"), *savedLocation.ToString());
+		ReturnToLastLocation();
+	}
+	else
+	{
+		nextLoc;
 		nextLoc.X = FMath::FRandRange(-1500, 1500);
 		nextLoc.Y = FMath::FRandRange(-1500, 1500);
 		nextLoc.Z = FMath::FRandRange(0, 400);
 		MoveToLocation(nextLoc);
-		UE_LOG(LogTemp, Warning, TEXT("Moving to %s"), *nextLoc.ToString());	
+		chaser->SetWanderState();
+		UE_LOG(LogTemp, Warning, TEXT("Moving to %s"), *nextLoc.ToString());
+	}
 }
 
 void AChaseAIController::OnMoveCompleted(FAIRequestID requestID, const FPathFollowingResult & result)
@@ -71,6 +77,8 @@ void AChaseAIController::OnMoveCompleted(FAIRequestID requestID, const FPathFoll
 
 void AChaseAIController::ReturnToLastLocation()
 {
+	
 	MoveToLocation(savedLocation);
+	chaser->SetRetreatState();
 	savedLocation = FVector::ZeroVector;
 }

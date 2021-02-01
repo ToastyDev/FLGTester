@@ -38,6 +38,10 @@ public:
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex);
 
+	void BeginPlay();
+
+	class AChaser* currentChaser;
+
 	class ASpawnButton* currentSpawnButton;
 
 	UPROPERTY(EditAnywhere)

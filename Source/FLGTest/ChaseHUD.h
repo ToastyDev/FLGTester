@@ -19,23 +19,18 @@ public:
 
 
 	void ShowHUD();
-
-
 	void HideHUD();
 
-	UPROPERTY(EditAnywhere)
-	class ASpawnButton* spawnButton;
+	void ShowGameOver();
+	void HideGameOver();
 
 protected:
 
 	TSharedPtr<class SSpawnPromptWidget> spawnWidget;
 	TSharedPtr<class SWidget> widgetContainer;
 
+	TSharedPtr<class SGameOverWidget> gameOverWidget;
+	TSharedPtr<class SWidget> gameOverWidgetContainer;
+
 	virtual void BeginPlay() override;
-
-	UFUNCTION()
-	void IsOverlapped();
-
-	UFUNCTION()
-	void IsNotOverlapped();
 };
